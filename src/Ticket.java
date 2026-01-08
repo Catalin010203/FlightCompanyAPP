@@ -57,5 +57,18 @@ public class Ticket {
         this.price = price;
     }
 
+    public TicketClass getTicketClass() {
+
+        return ticketClass;
+
+    }
+
+
+    public void setTicketClass(TicketClass ticketClass) {
+
+        this.ticketClass = ticketClass;
+
+    }
+
 
 }

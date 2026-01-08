@@ -8,20 +8,27 @@ import java.util.ArrayList;
 
 public class FlightService {
 
-    private List<Flight> flightsList = new ArrayList<>();
-    private List<Passenger> passengerList = new ArrayList<>();
+    private static List<Flight> flightsList = new ArrayList<>();
 
+    public static void validareTimpDepartureArrival(Flight flight) throws IllegalArgumentException {
 
-    public void validareData(Flight flight)throws IllegalArgumentException {
+        if (flight.getDateTimeArrival().isBefore(flight.getDateTimeDeparture())) {
 
-        if (flight.getDepartureTime().isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("Arrival date is before departure date");
+
+        }
+    }
+
+    public static void validareData(Flight flight) throws IllegalArgumentException {
+
+        if (flight.getDateTimeDeparture().isBefore(LocalDateTime.now())) {
 
             throw new IllegalArgumentException("Momentul decolarii e in trecut! Modifica si pune un timp viitor.");
 
         }
     }
 
-    public void validareNumarZbor(Flight flight, Flight newFlight) throws IllegalArgumentException {
+    public static void validareNumarZbor(Flight flight, Flight newFlight) throws IllegalArgumentException {
 
         if (flight.getFlightNumber().equals(newFlight.getFlightNumber())) {
 
@@ -32,7 +39,7 @@ public class FlightService {
 
     }
 
-    public void validareZborTimp(Flight flight, Flight newFlight) throws IllegalArgumentException {
+    public static void validareZborTimp(Flight flight, Flight newFlight) throws IllegalArgumentException {
 
         boolean sameRoute = (flight.getDepartureCity().equals(newFlight.getDepartureCity()) && flight.getArrivalCity().equals(newFlight.getArrivalCity()));
 
@@ -51,19 +58,22 @@ public class FlightService {
     }
 
 
-    public void addFlight(Flight flight) {
+    public static void addFlight(Flight flight) {
 
         try {
             validareData(flight);
+            validareTimpDepartureArrival(flight);
 
 
             for (Flight f : flightsList) {
 
                 validareNumarZbor(f, flight);
                 validareZborTimp(f, flight);
+                 
             }
 
             flightsList.add(flight);
+
         }  catch (IllegalArgumentException e) {
 
             System.out.println(e.getMessage());
@@ -137,7 +147,7 @@ public class FlightService {
 
         for (Flight flight : flightsList) {
 
-            if (flight.getDepartureTime().toLocalDate().equals(date)) {
+            if (flight.getDepartureDate().equals(date)) {
 
                 System.out.println(flight);
                 found = true;
@@ -159,7 +169,7 @@ public class FlightService {
 
         for (Flight flight : flightsList) {
 
-            if (flight.getDepartureTime().toLocalTime().equals(time)) {
+            if (flight.getDepartureTime().equals(time)) {
 
                 System.out.println(flight);
                 found = true;
@@ -172,22 +182,24 @@ public class FlightService {
         }
     }
 
-    public void findArrivalbyDate(LocalDate date) {
+    public static void findArrivalbyDate(LocalDate date) {
 
         boolean found = false;
 
         for (Flight flight : flightsList) {
 
-            if (flight.getArrivalTime().toLocalDate().equals(date)) {
+            if (flight.getArrivalDate().equals(date)) {
 
                 System.out.println(flight);
                 found = true;
 
             }
 
-            if (!found) {
-                System.out.println("Nu exista zboruri in data de: " + date);
-            }
+        }
+
+        if (!found) {
+
+            System.out.println("Nu exista zboruri in data de: " + date);
 
         }
     }
@@ -199,7 +211,7 @@ public class FlightService {
 
         for (Flight flight : flightsList) {
 
-            if (flight.getArrivalTime().toLocalTime().equals(time)) {
+            if (flight.getArrivalTime().equals(time)) {
 
                 System.out.println(flight);
                 found = true;
@@ -212,7 +224,7 @@ public class FlightService {
         }
     }
 
-    public void getAllFlights() {
+    public static void getAllFlights() {
 
         boolean found = false;
 

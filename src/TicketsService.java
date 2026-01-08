@@ -10,9 +10,15 @@ public class TicketsService {
 
     private List<Ticket> ticketList = new ArrayList<>();
 
+
     public void buyTicket(Ticket ticket, Flight flight, Passenger passenger) {
 
-        ticketList.add(ticket);
+
+        if (flight.getTickets().size() < flight.getNumarLocuri()) {
+
+            ticketList.add(ticket);
+
+        }
 
     }
 
